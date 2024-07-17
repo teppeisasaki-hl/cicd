@@ -1,0 +1,12 @@
+schemaVersion: config/v1
+
+scenarios:
+  - user.yaml
+
+pluginDirectory: ./gen 
+plugins:               
+  uuid.so:
+    src: ./plugins/uuid
+
+output:
+  verbose: false

@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  api:
+    container_name: api
+    build: 
+      context: ./app
+      dockerfile: ../docker/Dockerfile.dev
+    ports:
+      - 9000:9000
+    volumes:
+      - ./app/:/app/
+    depends_on:
+      - database
+
+  database:
+    image: postgres:14-alpine
+    container_name: database
+    ports:
+      - 5555:5432
+    environment:
+      TZ: "Asia/Tokyo"
+      POSTGRES_DB: database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - ./db:/var/lib/postgresql

@@ -1,0 +1,15 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'docker/Dockerfile', '-t', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cicd-repository/cicd-application:${COMMIT_SHA}', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cicd-repository/cicd-application:${COMMIT_SHA}']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'cicd-service'
+  - '--image'
+  - 'asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cicd-repository/cicd-application:${COMMIT_SHA}'
+  - '--region'
+  - 'asia-northeast1'

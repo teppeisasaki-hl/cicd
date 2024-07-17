@@ -1,0 +1,19 @@
+FROM golang:1.22.0-alpine
+
+WORKDIR /app
+
+RUN go install github.com/air-verse/air@latest
+
+COPY . .
+RUN go mod tidy
+
+ENV PORT=9000
+ENV DB_HOST=database
+ENV DB_PORT=5432
+ENV DB_USER=postgres
+ENV DB_PASSWORD=postgres
+ENV DB_NAME=database
+
+EXPOSE 9000
+
+CMD ["air", "-c", ".air.toml"]

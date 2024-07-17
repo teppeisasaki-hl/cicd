@@ -1,0 +1,66 @@
+title: user test
+plugins:
+  uuid: uuid.so
+vars:
+  url: http://localhost:9000/v1
+steps:
+  - title: create user
+    protocol: http
+    request:
+      method: POST
+      url: "{{vars.url}}/users"
+      header:
+        Content-Type: application/json
+      body:
+        name: '{{plugins.uuid.New()}}'
+    expect:
+      code: OK
+      body:
+        id: '{{int($) > 0}}'
+        name: "{{request.body.name}}"
+    bind:
+      vars:
+        user_id: '{{response.body.id}}'
+        user_name: '{{response.body.name}}'
+  - title: create user error
+    protocol: http
+    request:
+      method: POST
+      url: "{{vars.url}}/users"
+      header:
+        Content-Type: application/json
+    expect:
+      code: Bad Request
+  - title: list user
+    protocol: http
+    request:
+      method: GET
+      url: "{{vars.url}}/users"
+      header:
+        Content-Type: application/json
+    expect:
+      code: OK
+      body: '{{size($) == 1}}'
+  - title: get user
+    protocol: http
+    request:
+      method: GET
+      url: "{{vars.url}}/users/{{int(vars.user_id)}}"
+      header:
+        Content-Type: application/json
+    expect:
+      code: OK
+      body:
+        id: '{{int(vars.user_id)}}'
+        name: '{{vars.user_name}}'
+  - title: delete user
+    protocol: http
+    request:
+      method: DELETE
+      url: "{{vars.url}}/users/{{int(vars.user_id)}}"
+      header:
+        Content-Type: application/json
+    expect:
+      code: OK
+      body:
+        message: success

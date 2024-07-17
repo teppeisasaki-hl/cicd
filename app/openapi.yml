@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: BI Suite API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: ユーザー一覧を取得する
+      operationId: getUsers
+      responses:
+        '200':
+          description: ユーザー一覧を取得しました
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - Users
+      summary: ユーザーを作成する
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: ユーザーが作成されました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: ユーザーを取得する
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: ユーザー一覧を取得しました
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    delete:
+      tags:
+        - Users
+      summary: ユーザーを削除する
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: ユーザーを削除しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                  - message
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+        - name
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: ユーザー識別子
+      schema:
+        type: integer
