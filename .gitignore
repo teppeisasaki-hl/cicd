@@ -1,6 +1,6 @@
-coverage/*
-!coverage/.gitkeep
 db
 .env
 tmp
 scenarigo/gen/*.so
+infra/*
+!infra/main.tf

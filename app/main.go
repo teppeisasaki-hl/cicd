@@ -29,6 +29,7 @@ func main() {
 		MaxAge:           300,
 	}))
 	r.Get("/hc", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("healthy")) })
+	r.Get("/hc/hc", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("healthy")) })
 	api.HandlerFromMuxWithBaseURL(
 		handlers.NewUserHandler(repositories.NewUserRepository(db)), r, "/v1",
 	)

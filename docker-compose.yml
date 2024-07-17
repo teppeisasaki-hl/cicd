@@ -4,12 +4,12 @@ services:
   api:
     container_name: api
     build: 
-      context: .
-      dockerfile: docker/Dockerfile.dev
+      context: ./app
+      dockerfile: ../docker/Dockerfile.dev
     ports:
       - 9000:9000
     volumes:
-      - ./:/app/
+      - ./app/:/app/
     depends_on:
       - database
 
